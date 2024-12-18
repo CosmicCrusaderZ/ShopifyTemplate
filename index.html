@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopify - Build Your Empire</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        /* Reset & Variables */
+        :root {
+            --primary: #004C3F;
+            --secondary: #008060;
+            --accent: #00A783;
+            --text: #212B36;
+            --bg: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --shadow: rgba(0, 0, 0, 0.1);
+            --border: rgba(0, 0, 0, 0.08);
+            --hover: rgba(0, 128, 96, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --primary: #00A783;
+            --secondary: #008060;
+            --accent: #004C3F;
+            --text: #F1F1F1;
+            --bg: #0F172A;
+            --card-bg: rgba(15, 23, 42, 0.95);
+            --shadow: rgba(0, 0, 0, 0.3);
+            --border: rgba(255, 255, 255, 0.08);
+            --hover: rgba(0, 167, 131, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1rem 5%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--hover);
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 8rem 5% 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: 0.3s ease;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px var(--shadow);
+        }
+
+        .hero-image {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50%;
+            height: 80%;
+            background: url('https://picsum.photos/1200/800?random=1') center/cover;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px var(--shadow);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 5rem 5%;
+            background: var(--bg);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            padding: 2rem;
+            border-radius: 15px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 20px var(--shadow);
+            transition: 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 5rem 5%;
+            background: var(--bg);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .price-card {
+            padding: 2rem;
+            border-radius: 15px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 20px var(--shadow);
+            text-align: center;
+            transition: 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .price-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+
+        .price-features {
+            margin: 2rem 0;
+            list-style: none;
+        }
+
+        .price-features li {
+            margin: 0.8rem 0;
+            color: var(--text);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 5rem 5%;
+            background: var(--bg);
+        }
+
+        .testimonial-slider {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 2rem;
+            padding: 2rem 0;
+            scrollbar-width: none;
+        }
+
+        .testimonial-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .testimonial-card {
+            min-width: 300px;
+            scroll-snap-align: start;
+            padding: 2rem;
+            border-radius: 15px;
+            background: var(--card-bg);
+            box-shadow: 0 10px 20px var(--shadow);
+        }
+
+        /* Newsletter */
+        .newsletter {
+            padding: 5rem 5%;
+            text-align: center;
+            background: var(--bg);
+        }
+
+        .newsletter-form {
+            max-width: 500px;
+            margin: 2rem auto;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--card-bg);
+            color: var(--text);
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background: var(--card-bg);
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-links h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links a {
+            display: block;
+            color: var(--text);
+            text-decoration: none;
+            margin: 0.5rem 0;
+            transition: 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero-image {
+                display: none;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        /* Additional Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: 0.5s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="#" class="logo">Shopify</a>
+        <nav>
+            <a href="#features">Features</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#contact">Contact</a>
+            <button class="theme-toggle" id="themeToggle">🌙</button>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content" data-aos="fade-right">
+            <h1>Build Your Empire Online</h1>
+            <p>The all-in-one commerce platform to start, run, and grow your business. Trusted by millions of entrepreneurs worldwide.</p>
+            <a href="#" class="cta-btn">Start Free Trial</a>
+        </div>
+        <div class="hero-image" data-aos="fade-left"></div>
+    </section>
+
+    <section class="features" id="features">
+        <h2 class="section-title" data-aos="fade-up">Powerful Features</h2>
+        <div class="features-grid">
+            <div class="feature-card" data-aos="fade-up">
+                <h3>Online Store</h3>
+                <p>Sell your products online with a beautiful, customizable storefront.</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                <h3>Point of Sale</h3>
+                <p>Seamlessly connect your online and retail store operations.</p>
+            </div>
+            <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                <h3>Marketing Tools</h3>
+                <p>Grow your business with built-in marketing tools and integrations.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <h2 class="section-title" data-aos="fade-up">Simple Pricing</h2>
+        <div class="pricing-grid">
+            <div class="price-card" data-aos="fade-up">
+                <h3>Basic</h3>
+                <div class="price">$29</div>
+                <p>per month</p>
+                <ul class="price-features">
+                    <li>Online Store</li>
+                    <li>2 Staff Accounts</li>
+                    <li>24/7 Support</li>
+                </ul>
+                <a href="#" class="cta-btn">Choose Plan</a>
+            </div>
+            <div class="price-card" data-aos="fade-up" data-aos-delay="100">
+                <h3>Professional</h3>
+                <div class="price">$79</div>
+                <p>per month</p>
+                <ul class="price-features">
+                    <li>Everything in Basic</li>
+                    <li>5 Staff Accounts</li>
+                    <li>Professional Reports</li>
+                </ul>
+                <a href="#" class="cta-btn">Choose Plan</a>
+            </div>
+            <div class="price-card" data-aos="fade-up" data-aos-delay="200">
+                <h3>Advanced</h3>
+                <div class="price">$299</div>
+                <p>per month</p>
+                <ul class="price-features">
+                    <li>Everything in Professional</li>
+                    <li>15 Staff Accounts</li>
+                    <li>Advanced Report Builder</li>
+                </ul>
+                <a href="#" class="cta-btn">Choose Plan</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <h2 class="section-title" data-aos="fade-up">Success Stories</h2>
+        <div class="testimonial-slider">
+            <div class="testimonial-card" data-aos="fade-up">
+                <p>"Shopify has transformed our business. The platform is intuitive and powerful."</p>
+                <h4>John Smith</h4>
+                <p>CEO, Fashion Brand</p>
+            </div>
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                <p>"The best decision we made was choosing Shopify for our online store."</p>
+                <h4>Sarah Johnson</h4>
+                <p>Founder, Beauty Store</p>
+            </div>
+            <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                <p>"Amazing platform with exceptional customer support."</p>
+                <h4>Mike Wilson</h4>
+                <p>Owner, Electronics Shop</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <h2 class="section-title" data-aos="fade-up">Stay Updated</h2>
+        <form class="newsletter-form" data-aos="fade-up">
+            <input type="email" placeholder="Enter your email">
+            <button type="submit" class="cta-btn">Subscribe</button>
+        </form>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <a href="#">Features</a>
+                <a href="#">Pricing</a>
+                <a href="#">Enterprise</a>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+            </div>
+            <div class="footer-links">
+                <h4>Resources</h4>
+                <a href="#">Blog</a>
+                <a href="#">Guides</a>
+                <a href="#">Help Center</a>
+            </div>
+            <div class="footer-links">
+                <h4>Connect</h4>
+                <a href="#">Twitter</a>
+                <a href="#">Facebook</a>
+                <a href="#">Instagram</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        themeToggle.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                themeToggle.textContent = '🌙';
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.textContent = '☀️';
+            }
+        });
+
+        // Smooth Scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // GSAP Animations
+        gsap.from(".hero-content", {
+            duration: 1,
+            y: 50,
+            opacity: 0,
+            ease: "power3.out"
+        });
+
+        // Intersection Observer for fade-in elements
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        });
+
+        document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+
+        // Form Submission
+        const newsletterForm = document.querySelector('.newsletter-form');
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = e.target.querySelector('input').value;
+            if (email) {
+                alert('Thank you for subscribing!');
+                e.target.reset();
+            }
+        });
+    </script>
+</body>
+</html>
